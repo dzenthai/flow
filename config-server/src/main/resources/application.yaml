@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: config-server
+
+  profiles:
+    active: vault
+
+  cloud:
+    config:
+      server:
+        vault:
+          host: config-server-vault
+          port: 8200
+          order: 1
+          kv-version: 2
+          authentication: token
+          token: 1234
+
+    vault:
+      authentication: token
+      token: 1234
+      kv:
+        backend: secret
+        default-context: application
+        profile-separator: /
+
+server:
+  port: 8888

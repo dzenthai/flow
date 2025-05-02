@@ -1,0 +1,27 @@
+services:
+  vault:
+    container_name: config-server-vault
+    image: hashicorp/vault:latest
+    restart: unless-stopped
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=1234
+    ports:
+      - '8200:8200'
+    networks:
+      - dev
+
+  application:
+    container_name: config-server-application
+    build: .
+    restart: on-failure
+    ports:
+      - '8888:8888'
+    depends_on:
+      - vault
+    networks:
+      - dev
+
+networks:
+  dev:
+    name: dev
+    driver: bridge

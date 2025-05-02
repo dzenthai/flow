@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "d9c19173-defa-45ea-b866-b7c7316596e6",
+		"name": "budget-command",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35145925"
+	},
+	"item": [
+		{
+			"name": "income add",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"300\",\r\n    \"category\": \"SALARY\",\r\n    \"note\": \"First Note\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:80/api/incomes/add",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "80",
+					"path": [
+						"api",
+						"incomes",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "income delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:80/api/incomes/delete/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "80",
+					"path": [
+						"api",
+						"incomes",
+						"delete",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

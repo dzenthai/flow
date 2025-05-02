@@ -1,0 +1,17 @@
+{
+  "name": "budget-postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "budget-command-postgres",
+    "database.port": "5432",
+    "database.user": "dbu",
+    "database.password": "1234",
+    "database.dbname": "budget-command",
+    "topic.prefix": "budget-command-server",
+    "schema.include.list": "public",
+    "table.include.list": "public.expenses,public.incomes",
+    "plugin.name": "pgoutput",
+    "publication.name": "dbz_pub",
+    "decimal.handling.mode": "string"
+  }
+}

@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: budget-command
+
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    config:
+      uri: http://config-application:8888
+
+  datasource:
+    username: dbu
+    password: 1234
+    url: jdbc:postgresql://budget-command-postgres:5432/budget-command
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-root.yaml
+
+server:
+  port: 8081

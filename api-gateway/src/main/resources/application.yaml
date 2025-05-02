@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: api-gateway
+
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    gateway:
+      routes:
+        - id: identity-server-application
+          uri: http://identity-server-application:8443
+          predicates:
+            - Path=/auth/**
+        - id: budget-command-application
+          uri: http://budget-command-application:8081
+          predicates:
+            - Path=/api/**
+        - id: budget-query-application
+          uri: http://budget-query-application:8082
+          predicates:
+            - Path=/api/**
+      default-filters:
+        - name: ApiGatewayFilter
+    config:
+      uri: http://config-server-application:8888
+      fail-fast: true
+
+server:
+  port: 80

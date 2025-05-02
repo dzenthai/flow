@@ -1,0 +1,14 @@
+services:
+  application:
+    container_name: api-gateway
+    build: .
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    networks:
+      - dev
+
+networks:
+  dev:
+    name: dev
+    driver: bridge

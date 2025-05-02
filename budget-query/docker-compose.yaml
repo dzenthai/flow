@@ -1,0 +1,29 @@
+services:
+  postgres:
+    container_name: budget-query-postgres
+    image: postgres:latest
+    restart: on-failure
+    environment:
+      POSTGRES_USER: dbu
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: budget-query
+    ports:
+      - '5434:5432'
+    networks:
+      - dev
+
+  application:
+    container_name: budget-query-application
+    build: .
+    restart: unless-stopped
+    ports:
+      - '8082:8082'
+    depends_on:
+      - postgres
+    networks:
+      - dev
+
+networks:
+  dev:
+    name: dev
+    driver: bridge

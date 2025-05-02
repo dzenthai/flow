@@ -1,0 +1,14 @@
+package com.dzenthai.auth.model.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+
+
+@Builder
+public record RefreshResponse(
+        @JsonProperty("access_token")
+        String accessToken,
+        @JsonProperty("refresh_token")
+        String refreshToken
+) {
+}

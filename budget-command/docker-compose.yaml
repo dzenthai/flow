@@ -1,0 +1,30 @@
+services:
+  postgres:
+    container_name: budget-command-postgres
+    image: postgres:latest
+    restart: on-failure
+    environment:
+      POSTGRES_USER: dbu
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: budget-command
+      POSTGRES_INITDB_ARGS: "-c wal_level=logical -c max_replication_slots=10 -c max_wal_senders=10"
+    ports:
+      - '5433:5432'
+    networks:
+      - dev
+
+  application:
+    container_name: budget-command-application
+    build: .
+    restart: unless-stopped
+    ports:
+      - '8081:8081'
+    depends_on:
+      - postgres
+    networks:
+      - dev
+
+networks:
+  dev:
+   name: dev
+   driver: bridge

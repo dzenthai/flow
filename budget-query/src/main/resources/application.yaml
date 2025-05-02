@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: budget-query
+
+  datasource:
+    username: dbu
+    password: 1234
+    url: jdbc:postgresql://budget-query-postgres:5432/budget-query
+
+  liquibase:
+    change-log: classpath*:/db/changelog/db.changelog-root.yaml

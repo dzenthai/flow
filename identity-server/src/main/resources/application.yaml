@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: identity-server
+
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    config:
+      uri: http://config-server-application:8888
+
+  datasource:
+    username: dbu
+    password: 1234
+    url: jdbc:postgresql://identity-server-postgres:5432/identity
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+  data:
+    redis:
+      host: identity-server-redis
+      port: 6379
+
+server:
+  port: 8443
