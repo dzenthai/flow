@@ -3,6 +3,7 @@ package com.dzenthai.budget_command.controller;
 import com.dzenthai.budget_command.model.dto.TransactionDTO;
 import com.dzenthai.budget_command.model.enums.ExpenseCategory;
 import com.dzenthai.budget_command.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<?> add(
-            @RequestBody TransactionDTO<ExpenseCategory> transactionDTO, @RequestHeader HttpHeaders headers) {
+            @Valid @RequestBody TransactionDTO<ExpenseCategory> transactionDTO, @RequestHeader HttpHeaders headers) {
         return new ResponseEntity<>(expenseService.save(transactionDTO, headers.getFirst("X-User-Id")),
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         try {
             expenseService.delete(id);

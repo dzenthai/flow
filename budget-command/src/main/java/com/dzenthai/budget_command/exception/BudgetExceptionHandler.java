@@ -1,5 +1,7 @@
 package com.dzenthai.budget_command.exception;
 
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import java.time.Instant;
 import java.util.Map;
 
 
+@Slf4j
 @ControllerAdvice
 public class BudgetExceptionHandler {
 
@@ -28,12 +31,22 @@ public class BudgetExceptionHandler {
         return buildExceptionData(e, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({ValidationException.class})
+    public ResponseEntity<?> handleValidationException(ValidationException e) {
+        return buildExceptionData(e, HttpStatus.BAD_REQUEST);
+    }
+
     public ResponseEntity<?> buildExceptionData(final Exception exception, final HttpStatusCode status) {
+        var message = exception.getMessage();
+        var code = status.value();
+        var timestamp = Instant.now();
         var data = Map.of(
-                "message", exception.getMessage(),
-                "code", status.value(),
-                "timestamp", Instant.now()
+                "message", message,
+                "code", status,
+                "timestamp", timestamp
         );
+        log.warn("BudgetExceptionHandler | message: {} | code: {} | timestamp: {}",
+                message, code, timestamp);
         return new ResponseEntity<>(data, status);
     }
 }

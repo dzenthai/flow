@@ -9,6 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, UUID> {
-
-    Income findIncomeById(UUID id);
 }

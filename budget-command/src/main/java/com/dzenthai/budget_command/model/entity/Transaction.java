@@ -1,7 +1,6 @@
 package com.dzenthai.budget_command.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,7 +13,6 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode
 public class Transaction <T extends Enum<T>> {
 
-    @DecimalMin(value = "0.1")
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
