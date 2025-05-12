@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Repository
@@ -18,4 +17,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, String> {
 
     @Query("SELECT e FROM Expense e WHERE e.userId =: userId")
     Optional<List<Expense>> findExpenseByUserId(String userId);
+
+    void deleteExpenseById(String id);
 }

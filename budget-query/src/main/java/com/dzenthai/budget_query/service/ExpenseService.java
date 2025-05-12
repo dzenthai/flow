@@ -3,6 +3,9 @@ package com.dzenthai.budget_query.service;
 import com.dzenthai.budget_query.model.entity.Expense;
 import com.dzenthai.budget_query.repository.ExpenseRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,7 @@ public class ExpenseService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id", value = "expenseById")
     public Expense getExpenseById(String id) {
         log.info("ExpenseService | Receiving expense by id: {}", id);
         return expenseRepository.findExpenseById(id).orElseThrow(() ->
@@ -30,6 +34,7 @@ public class ExpenseService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(key = "#userId", value = "expensesByUser")
     public List<Expense> getAllExpensesByUserId(String userId) {
         log.info("ExpenseService | Receiving all expenses by userId: {}", userId);
         return expenseRepository.findExpenseByUserId(userId)
@@ -37,17 +42,20 @@ public class ExpenseService {
     }
 
     @Transactional
-    public void saveExpense(Expense expense) {
+    @CachePut(key = "#expense.id", value = "expenseById")
+    public Expense saveExpense(Expense expense) {
         log.info("ExpenseService | Creating expense: {}", expense);
         if (expenseRepository.existsById(expense.getId())) {
-            log.info("ExpenseService | Expense with ID {} already exists, skipping save", expense.getId());
-            return;
+            throw new IllegalArgumentException("ExpenseService | Expense with ID %s already exists, skipping save"
+                    .formatted(expense.getId()));
         }
-        expenseRepository.save(expense);
+        return expenseRepository.save(expense);
     }
 
-    public void deleteExpense(Expense expense) {
-        log.info("ExpenseService | Deleting expense: {}", expense);
-        expenseRepository.delete(expense);
+    @Transactional
+    @CacheEvict(key = "#id", value = "expenseById")
+    public void deleteExpense(String id) {
+        log.info("ExpenseService | Deleting expense: {}", id);
+        expenseRepository.deleteExpenseById(id);
     }
 }

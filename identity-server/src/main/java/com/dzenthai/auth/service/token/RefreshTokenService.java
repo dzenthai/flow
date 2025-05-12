@@ -35,7 +35,8 @@ public class RefreshTokenService {
     }
 
     public String extractUsernameFromToken(String refreshToken) {
-        return redisTemplate.opsForValue().get(refreshToken);
+        return redisTemplate.opsForValue()
+                .get(refreshToken);
     }
 
     public void revoke(String token) {

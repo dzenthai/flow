@@ -43,7 +43,7 @@ public class IncomeListener {
                     }
                     case DELETE -> {
                         log.info("Processing DELETE operation for income: {}", payload.data());
-                        incomeService.deleteIncome(payload.data());
+                        incomeService.deleteIncome(payload.data().getId());
                         log.info("Successfully processed DELETE operation for income: {}", payload.data().getId());
                     }
                 }

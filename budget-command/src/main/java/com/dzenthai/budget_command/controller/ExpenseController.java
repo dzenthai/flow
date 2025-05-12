@@ -26,14 +26,14 @@ public class ExpenseController {
     public ResponseEntity<?> add(
             @Valid @RequestBody TransactionDTO<ExpenseCategory> transactionDTO, @RequestHeader HttpHeaders headers) {
         return new ResponseEntity<>(expenseService.save(transactionDTO, headers.getFirst("X-User-Id")),
-                HttpStatus.OK);
+                HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         try {
             expenseService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

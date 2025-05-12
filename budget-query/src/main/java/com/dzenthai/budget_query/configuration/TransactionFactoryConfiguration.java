@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class TransactionFactoryConfig {
+public class TransactionFactoryConfiguration {
 
     @Bean
     public TransactionFactory<Income> incomeTransactionFactory() {

@@ -26,16 +26,16 @@ public class IncomeController {
     public ResponseEntity<?> add(
             @Valid @RequestBody TransactionDTO<IncomeCategory> transactionDTO, @RequestHeader HttpHeaders headers) {
         return new ResponseEntity<>(incomeService.save(transactionDTO, headers.getFirst("X-User-Id")),
-                HttpStatus.OK);
+                HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         try {
             incomeService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

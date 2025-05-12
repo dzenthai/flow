@@ -3,6 +3,9 @@ package com.dzenthai.budget_query.service;
 import com.dzenthai.budget_query.model.entity.Income;
 import com.dzenthai.budget_query.repository.IncomeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,7 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id", value = "incomeById")
     public Income getIncomeById(String id) {
         log.info("IncomeService | Receiving income by id: {}", id);
         return incomeRepository.findIncomeById(id).orElseThrow(() ->
@@ -30,6 +34,7 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(key = "#userId", value = "incomeByUser")
     public List<Income> getAllIncomesByUserId(String userId) {
         log.info("IncomeService | Receiving all incomes by userId: {}", userId);
         return incomeRepository.findIncomeByUserId(userId)
@@ -37,17 +42,20 @@ public class IncomeService {
     }
 
     @Transactional
-    public void saveIncome(Income income) {
+    @CachePut(key = "#income.id", value = "incomeById")
+    public Income saveIncome(Income income) {
         log.info("IncomeService | Creating income: {}", income);
         if (incomeRepository.existsById(income.getId())) {
-            log.info("IncomeService | Income with ID {} already exists, skipping save", income.getId());
-            return;
+            throw new IllegalArgumentException("IncomeService | Income with ID %s already exists, skipping save"
+                    .formatted(income.getId()));
         }
-        incomeRepository.save(income);
+        return incomeRepository.save(income);
     }
 
-    public void deleteIncome(Income income) {
-        log.info("IncomeService | Deleting income: {}", income);
-        incomeRepository.delete(income);
+    @Transactional
+    @CacheEvict(key = "#id", value = "incomeById")
+    public void deleteIncome(String id) {
+        log.info("IncomeService | Deleting income: {}", id);
+        incomeRepository.deleteIncomeById(id);
     }
 }

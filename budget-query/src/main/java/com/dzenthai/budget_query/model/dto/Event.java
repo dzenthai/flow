@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Event<T>(
+        @JsonProperty("before")
+        T before,
         @JsonProperty("after")
-        T message,
+        T after,
         @JsonProperty("op")
         String operation
 ) {

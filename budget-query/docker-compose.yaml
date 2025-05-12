@@ -12,6 +12,15 @@ services:
     networks:
       - dev
 
+  redis:
+    container_name: budget-query-redis
+    image: redis:latest
+    restart: on-failure
+    ports:
+      - '6380:6379'
+    networks:
+      - dev
+
   application:
     container_name: budget-query-application
     build: .
@@ -20,6 +29,7 @@ services:
       - '8082:8082'
     depends_on:
       - postgres
+      - redis
     networks:
       - dev
 

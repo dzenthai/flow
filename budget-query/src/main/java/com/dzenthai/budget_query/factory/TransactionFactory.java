@@ -4,6 +4,7 @@ import com.dzenthai.budget_query.model.dto.Event;
 import com.dzenthai.budget_query.model.dto.Payload;
 import com.dzenthai.budget_query.model.enums.OperationType;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,13 +29,16 @@ public class TransactionFactory<T> {
             JavaType eventType = objectMapper.getTypeFactory()
                     .constructParametricType(Event.class, payloadClass);
 
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
             Event<T> event = objectMapper.readValue(message, eventType);
 
             if (event != null && event.operation() != null) {
-                T data = event.message();
+                T beforeData = event.before();
+                T afterData = event.after();
                 return switch (event.operation()) {
-                    case "c" -> new Payload<>(data, OperationType.CREATE);
-                    case "d" -> new Payload<>(data, OperationType.DELETE);
+                    case "c" -> new Payload<>(afterData, OperationType.CREATE);
+                    case "d" -> new Payload<>(beforeData, OperationType.DELETE);
                     default  -> {
                         log.warn("TransactionFactory | Unknown operation: {}", event.operation());
                         yield null;

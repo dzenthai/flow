@@ -43,7 +43,7 @@ public class ExpenseListener {
                     }
                     case DELETE -> {
                         log.info("Processing DELETE operation for expense: {}", payload.data());
-                        expenseService.deleteExpense(payload.data());
+                        expenseService.deleteExpense(payload.data().getId());
                         log.info("Successfully processed DELETE operation for expense: {}", payload.data().getId());
                     }
                 }

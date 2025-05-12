@@ -12,9 +12,11 @@ import java.util.Optional;
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, String> {
 
-    @Query("SELECT i FROM Income i WHERE i.id =: id")
+    @Query("SELECT i FROM Income i WHERE i.id = :id")
     Optional<Income> findIncomeById(String id);
 
-    @Query("SELECT i FROM Income i WHERE i.userId =: userId")
+    @Query("SELECT i FROM Income i WHERE i.userId = :userId")
     Optional<List<Income>> findIncomeByUserId(String userId);
+
+    void deleteIncomeById(String id);
 }
